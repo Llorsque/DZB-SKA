@@ -69,6 +69,32 @@
   .nav-btn:disabled { opacity:0.28; cursor:default; }
   .rit-counter { font-family:'Bebas Neue',cursive; font-size:18px; letter-spacing:2px; color:var(--gold); min-width:52px; text-align:center; }
 
+  /* ══ ZOOM CONTROLS ══ */
+  .zoom-group {
+    display:flex; align-items:center; gap:5px;
+    padding-left:12px;
+    border-left:1px solid rgba(200,220,240,0.12);
+    margin-left:4px;
+  }
+  .zoom-label { font-size:9px; color:var(--ice-dim); letter-spacing:1px; margin-right:2px; }
+  .zoom-btn {
+    width:28px; height:28px;
+    border:1px solid rgba(200,212,232,0.16); background:rgba(200,212,232,0.05);
+    color:var(--silver); border-radius:5px; cursor:pointer; font-size:14px; font-weight:600;
+    display:flex; align-items:center; justify-content:center; transition:all 0.15s;
+    line-height:1;
+  }
+  .zoom-btn:hover { background:rgba(200,212,232,0.12); border-color:var(--accent); color:#fff; }
+  .zoom-pct { font-family:'Bebas Neue',cursive; font-size:15px; color:var(--silver); min-width:38px; text-align:center; letter-spacing:1px; }
+  .zoom-presets { display:flex; gap:3px; }
+  .zoom-preset {
+    font-size:8.5px; padding:2px 6px; border-radius:4px; cursor:pointer; letter-spacing:0.5px;
+    border:1px solid rgba(200,212,232,0.14); background:rgba(200,212,232,0.05);
+    color:var(--silver-dim); transition:all 0.15s; white-space:nowrap;
+  }
+  .zoom-preset:hover { background:rgba(200,212,232,0.10); color:var(--silver); }
+  .zoom-preset.active { background:rgba(74,142,202,0.20); border-color:var(--accent); color:var(--ice); }
+
   /* ══ LAYOUT ══ */
   .main { display:flex; flex:1; overflow:hidden; }
 
@@ -230,6 +256,17 @@
     <button class="nav-btn" id="btnPrev" onclick="navigate(-1)">&#8592;</button>
     <div class="rit-counter" id="ritCounter">1 / 24</div>
     <button class="nav-btn" id="btnNext" onclick="navigate(1)">&#8594;</button>
+  </div>
+  <div class="zoom-group">
+    <span class="zoom-label">ZOOM</span>
+    <button class="zoom-btn" onclick="changeZoom(-5)">−</button>
+    <div class="zoom-pct" id="zoomPct">100%</div>
+    <button class="zoom-btn" onclick="changeZoom(+5)">+</button>
+    <div class="zoom-presets">
+      <button class="zoom-preset" id="zp-small"  onclick="setZoom(75)">13″</button>
+      <button class="zoom-preset" id="zp-medium" onclick="setZoom(90)">17″</button>
+      <button class="zoom-preset active" id="zp-large"  onclick="setZoom(100)">22″</button>
+    </div>
   </div>
 </header>
 
@@ -425,8 +462,34 @@ function jumpTo(i) { cur=i; render(); }
 document.addEventListener('keydown', e => {
   if (e.key==='ArrowRight') navigate(1);
   if (e.key==='ArrowLeft')  navigate(-1);
+  if (e.key==='+' || e.key==='=') changeZoom(+5);
+  if (e.key==='-') changeZoom(-5);
 });
 
+// ZOOM
+let zoomLevel = parseInt(localStorage.getItem('zbZoom') || '100');
+const ZOOM_PRESETS = [
+  { id:'zp-small',  val:75  },
+  { id:'zp-medium', val:90  },
+  { id:'zp-large',  val:100 },
+];
+function applyZoom() {
+  document.documentElement.style.zoom = zoomLevel + '%';
+  document.getElementById('zoomPct').textContent = zoomLevel + '%';
+  localStorage.setItem('zbZoom', zoomLevel);
+  ZOOM_PRESETS.forEach(p => {
+    document.getElementById(p.id).classList.toggle('active', p.val === zoomLevel);
+  });
+}
+function changeZoom(delta) {
+  zoomLevel = Math.min(130, Math.max(60, zoomLevel + delta));
+  applyZoom();
+}
+function setZoom(val) {
+  zoomLevel = val;
+  applyZoom();
+}
+applyZoom();
 render();
 </script>
 </body>
