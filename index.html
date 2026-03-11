@@ -522,7 +522,7 @@ let cur = 0;
 
 // Tijden omloop 1: opgeslagen als { "RitNr_BaanNaam": "10.45" }
 let tijden = JSON.parse(localStorage.getItem('dzb_kids_tijden') || '{}');
-function tijdKey(ritNr, naam) { return ritNr + '_' + naam; }
+function tijdKey(naam) { return 'tijd_' + naam; }
 function saveTijden() { localStorage.setItem('dzb_kids_tijden', JSON.stringify(tijden)); }
 const bc = b => b.toLowerCase();
 const baanMap = { Wit:'BINNEN · WIT', Rood:'MIDDEN · ROOD', Geel:'BUITEN · GEEL' };
@@ -536,10 +536,10 @@ const FIELDS = [
   ['Leuk weetje',       'weetje',   true ],
 ];
 
-function riderColHTML(d, ritNr, omloop) {
+function riderColHTML(d, omloop) {
   const info = getInfo(d.n);
   const cls = bc(d.b);
-  const key = tijdKey(ritNr, d.n);
+  const key = tijdKey(d.n);
 
   // Omloop 2: toon de opgeslagen tijd bovenaan als referentie
   let tijdBlock = '';
@@ -584,7 +584,7 @@ function riderColHTML(d, ritNr, omloop) {
 
 
 function cardHTML(r, isCurrent) {
-  const cols = r.d.map(d => riderColHTML(d, r.rit, r.omloop)).join('');
+  const cols = r.d.map(d => riderColHTML(d, r.omloop)).join('');
   const gText = r.g === 'F' ? 'MEISJES' : 'JONGENS';
   const oLabel = `OMLOOP ${r.omloop}`;
   return `
@@ -682,7 +682,7 @@ function renderTijdenBody() {
   function groepHTML(namen, geslacht) {
     const label = geslacht === 'f' ? '🩷 MEISJES' : '💙 JONGENS';
     const rows = namen.map(naam => {
-      const key = tijdKey(1, naam); // always rit from SL omloop1 — use naam as key
+      const key = tijdKey(naam);
       const val = tijden[key] || '';
       return `<div class="tijden-row">
         <div class="tijden-naam">${naam}</div>
@@ -709,12 +709,6 @@ function updateTijd(key, input) {
   input.classList.toggle('filled', val.length > 0);
   saveTijden();
 }
-
-// Override tijdKey for the overlay: key by name only (omloop1 rit doesn't matter)
-// We need to match what riderColHTML uses: tijdKey(ritNr, naam)
-// So we store by naam directly — update tijdKey to be name-only
-// IMPORTANT: override the existing tijdKey to be name-based
-function tijdKey(ritNr, naam) { return 'tijd_' + naam; }
 
 // SCREEN ZOOM (affects entire page incl. left panel)
 let zoomLevel = parseInt(localStorage.getItem('zbZoom') || '100');
