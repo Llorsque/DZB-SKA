@@ -259,6 +259,54 @@
     background:rgba(200,212,232,0.06); border:1px solid rgba(200,212,232,0.11);
     border-radius:4px; padding:1px 6px; font-size:10px; color:rgba(200,212,232,0.32);
   }
+
+  /* ══ TIJDEN OMLOOP ══ */
+  .tijd-invoer-wrap {
+    display: flex; flex-direction: column; gap: 3px;
+    margin-bottom: 8px; flex-shrink: 0;
+    background: rgba(74,142,202,0.08);
+    border: 1px solid rgba(74,142,202,0.22);
+    border-radius: 7px; padding: 7px 9px;
+  }
+  .tijd-invoer-lbl {
+    font-size: 8.5px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--accent); opacity: 0.85;
+  }
+  .tijd-invoer {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(74,142,202,0.3);
+    border-radius: 5px; padding: 5px 8px;
+    color: var(--ice); font-size: 18px; font-family: 'Bebas Neue', cursive;
+    letter-spacing: 2px; width: 100%; outline: none;
+    transition: border-color 0.15s;
+  }
+  .tijd-invoer:focus { border-color: var(--accent); background: rgba(74,142,202,0.10); }
+  .tijd-invoer::placeholder { color: rgba(200,220,240,0.2); }
+
+  .tijd-referentie {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 8px; flex-shrink: 0;
+    background: rgba(240,192,64,0.08);
+    border: 1px solid rgba(240,192,64,0.28);
+    border-radius: 7px; padding: 7px 10px;
+  }
+  .tijd-referentie.leeg {
+    background: rgba(200,220,240,0.04);
+    border-color: rgba(200,220,240,0.10);
+  }
+  .tijd-ref-lbl {
+    font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--gold); white-space: nowrap; flex-shrink: 0;
+  }
+  .tijd-referentie.leeg .tijd-ref-lbl { color: var(--ice-dim); }
+  .tijd-ref-val {
+    font-family: 'Bebas Neue', cursive; font-size: 22px;
+    color: var(--gold); letter-spacing: 2px; line-height: 1;
+  }
+  .tijd-ref-val-leeg {
+    font-size: 11px; color: rgba(200,220,240,0.25); font-style: italic;
+  }
+
 </style>
 </head>
 <body>
@@ -390,6 +438,11 @@ const SL = [
 ];
 
 let cur = 0;
+
+// Tijden omloop 1: opgeslagen als { "RitNr_BaanNaam": "10.45" }
+let tijden = JSON.parse(localStorage.getItem('dzb_kids_tijden') || '{}');
+function tijdKey(ritNr, naam) { return ritNr + '_' + naam; }
+function saveTijden() { localStorage.setItem('dzb_kids_tijden', JSON.stringify(tijden)); }
 const bc = b => b.toLowerCase();
 const baanMap = { Wit:'BINNEN · WIT', Rood:'MIDDEN · ROOD', Geel:'BUITEN · GEEL' };
 const FIELDS = [
@@ -402,9 +455,38 @@ const FIELDS = [
   ['Leuk weetje',       'weetje',   true ],
 ];
 
-function riderColHTML(d) {
+function riderColHTML(d, ritNr, omloop) {
   const info = getInfo(d.n);
   const cls = bc(d.b);
+  const key = tijdKey(ritNr, d.n);
+
+  // Omloop 1: toon invoerveld onderaan
+  // Omloop 2: toon de opgeslagen tijd bovenaan als referentie
+  let tijdBlock = '';
+  if (omloop === 1) {
+    const val = tijden[key] || '';
+    tijdBlock = `
+      <div class="tijd-invoer-wrap">
+        <div class="tijd-invoer-lbl">TIJD OMLOOP 1</div>
+        <input class="tijd-invoer" type="text" placeholder="0.00.00"
+          value="${val}"
+          oninput="slaaTijdOp('${key}', this.value)"
+          onclick="this.select()"
+        />
+      </div>`;
+  } else if (omloop === 2) {
+    const omloop1Tijd = tijden[key];
+    tijdBlock = omloop1Tijd
+      ? `<div class="tijd-referentie">
+          <div class="tijd-ref-lbl">⏱ OMLOOP 1</div>
+          <div class="tijd-ref-val">${omloop1Tijd}</div>
+        </div>`
+      : `<div class="tijd-referentie leeg">
+          <div class="tijd-ref-lbl">⏱ OMLOOP 1</div>
+          <div class="tijd-ref-val-leeg">niet ingevuld</div>
+        </div>`;
+  }
+
   let body = '';
   if (info) {
     body = `<div class="info-list">` +
@@ -425,12 +507,20 @@ function riderColHTML(d) {
         <span class="baan-lbl ${cls}">${baanMap[d.b]}</span>
       </div>
       <div class="rider-name-full">${d.n}</div>
+      ${tijdBlock}
       ${body}
     </div>`;
 }
 
+function slaaTijdOp(key, val) {
+  tijden[key] = val.trim();
+  saveTijden();
+  // Live update any matching referentie in de "volgende rit" kaart
+  renderRight();
+}
+
 function cardHTML(r, isCurrent) {
-  const cols = r.d.map(d => riderColHTML(d)).join('');
+  const cols = r.d.map(d => riderColHTML(d, r.rit, r.omloop)).join('');
   const gText = r.g === 'F' ? 'MEISJES' : 'JONGENS';
   const oLabel = `OMLOOP ${r.omloop}`;
   return `
