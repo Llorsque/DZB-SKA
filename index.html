@@ -584,7 +584,13 @@ function riderColHTML(d, omloop) {
 
 
 function cardHTML(r, isCurrent) {
-  const cols = r.d.map(d => riderColHTML(d, r.omloop)).join('');
+  // Display order: Wit (binnen) → Geel (buiten) → Rood (midden) = links naar rechts
+  const displayOrder = [
+    r.d.find(d => d.b === 'Wit'),
+    r.d.find(d => d.b === 'Geel'),
+    r.d.find(d => d.b === 'Rood'),
+  ].filter(Boolean);
+  const cols = displayOrder.map(d => riderColHTML(d, r.omloop)).join('');
   const gText = r.g === 'F' ? 'MEISJES' : 'JONGENS';
   const oLabel = `OMLOOP ${r.omloop}`;
   return `
