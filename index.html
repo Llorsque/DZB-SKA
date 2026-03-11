@@ -307,6 +307,90 @@
     font-size: 11px; color: rgba(200,220,240,0.25); font-style: italic;
   }
 
+
+  /* ══ TIJDEN KNOP ══ */
+  .tijden-btn {
+    margin-left: 8px;
+    padding: 5px 14px; border-radius: 7px; cursor: pointer;
+    font-family: 'Bebas Neue', cursive; font-size: 13px; letter-spacing: 2px;
+    background: rgba(74,142,202,0.14); border: 1px solid rgba(74,142,202,0.32);
+    color: var(--ice); transition: all 0.15s; white-space: nowrap;
+  }
+  .tijden-btn:hover { background: rgba(74,142,202,0.26); border-color: var(--accent); }
+
+  /* ══ TIJDEN OVERLAY ══ */
+  .tijden-overlay {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(5,12,24,0.88); backdrop-filter: blur(5px);
+    align-items: center; justify-content: center;
+  }
+  .tijden-overlay.open { display: flex; }
+
+  .tijden-modal {
+    background: var(--navy-mid);
+    border: 1px solid rgba(200,220,240,0.12);
+    border-radius: 14px; overflow: hidden;
+    width: 680px; max-width: 95vw; max-height: 88vh;
+    display: flex; flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  }
+
+  .tijden-modal-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 20px; border-bottom: 1px solid rgba(200,220,240,0.09);
+    background: rgba(0,0,0,0.2); flex-shrink: 0;
+  }
+  .tijden-modal-title {
+    font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 3px;
+  }
+  .tijden-modal-title span { color: var(--gold); }
+  .tijden-modal-sub { font-size: 10px; color: var(--ice-dim); letter-spacing: 1px; }
+  .tijden-close {
+    margin-left: auto; padding: 5px 14px; border-radius: 6px; cursor: pointer;
+    font-family: 'Bebas Neue', cursive; font-size: 12px; letter-spacing: 2px;
+    background: rgba(200,220,240,0.07); border: 1px solid rgba(200,220,240,0.16);
+    color: var(--silver); transition: all 0.15s;
+  }
+  .tijden-close:hover { background: rgba(200,220,240,0.14); color: #fff; }
+
+  .tijden-modal-body {
+    overflow-y: auto; padding: 16px 20px; display: flex; gap: 24px;
+  }
+  .tijden-modal-body::-webkit-scrollbar { width: 4px; }
+  .tijden-modal-body::-webkit-scrollbar-thumb { background: rgba(200,212,232,0.15); border-radius:2px; }
+
+  .tijden-groep { flex: 1; display: flex; flex-direction: column; gap: 0; }
+
+  .tijden-groep-title {
+    font-family: 'Bebas Neue', cursive; font-size: 14px; letter-spacing: 3px;
+    color: var(--ice-dim); padding-bottom: 8px; margin-bottom: 4px;
+    border-bottom: 1px solid rgba(200,220,240,0.09);
+  }
+  .tijden-groep-title.m { color: var(--accent); }
+  .tijden-groep-title.f { color: #d080b8; }
+
+  .tijden-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 5px 0; border-bottom: 1px solid rgba(200,220,240,0.05);
+  }
+  .tijden-row:last-child { border-bottom: none; }
+
+  .tijden-naam {
+    flex: 1; font-size: 13px; color: var(--silver); min-width: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .tijden-input {
+    width: 90px; flex-shrink: 0;
+    background: rgba(0,0,0,0.28);
+    border: 1px solid rgba(200,220,240,0.14); border-radius: 5px;
+    color: var(--ice); font-size: 15px; font-family: 'Bebas Neue', cursive;
+    letter-spacing: 2px; padding: 4px 8px; outline: none;
+    text-align: center; transition: border-color 0.15s;
+  }
+  .tijden-input:focus { border-color: var(--accent); background: rgba(74,142,202,0.10); }
+  .tijden-input::placeholder { color: rgba(200,220,240,0.18); letter-spacing: 1px; }
+  .tijden-input.filled { border-color: rgba(74,142,202,0.35); color: var(--gold); }
+
 </style>
 </head>
 <body>
@@ -323,6 +407,7 @@
     <div class="rit-counter" id="ritCounter">1 / 24</div>
     <button class="nav-btn" id="btnNext" onclick="navigate(1)">&#8594;</button>
   </div>
+  <button class="tijden-btn" onclick="openTijden()">⏱ TIJDEN OMLOOP 1</button>
   <div class="zoom-group">
     <span class="zoom-label">SCHERM</span>
     <button class="zoom-btn" onclick="changeZoom(-5)">−</button>
@@ -456,21 +541,9 @@ function riderColHTML(d, ritNr, omloop) {
   const cls = bc(d.b);
   const key = tijdKey(ritNr, d.n);
 
-  // Omloop 1: toon invoerveld onderaan
   // Omloop 2: toon de opgeslagen tijd bovenaan als referentie
   let tijdBlock = '';
-  if (omloop === 1) {
-    const val = tijden[key] || '';
-    tijdBlock = `
-      <div class="tijd-invoer-wrap">
-        <div class="tijd-invoer-lbl">TIJD OMLOOP 1</div>
-        <input class="tijd-invoer" type="text" placeholder="0.00.00"
-          value="${val}"
-          oninput="slaaTijdOp('${key}', this.value)"
-          onclick="this.select()"
-        />
-      </div>`;
-  } else if (omloop === 2) {
+  if (omloop === 2) {
     const omloop1Tijd = tijden[key];
     tijdBlock = omloop1Tijd
       ? `<div class="tijd-referentie">
@@ -508,12 +581,7 @@ function riderColHTML(d, ritNr, omloop) {
     </div>`;
 }
 
-function slaaTijdOp(key, val) {
-  tijden[key] = val.trim();
-  saveTijden();
-  // Live update any matching referentie in de "volgende rit" kaart
-  renderRight();
-}
+
 
 function cardHTML(r, isCurrent) {
   const cols = r.d.map(d => riderColHTML(d, r.rit, r.omloop)).join('');
@@ -581,6 +649,73 @@ document.addEventListener('keydown', e => {
   if (e.key==='-') changeZoom(-5);
 });
 
+// ── TIJDEN OVERLAY ───────────────────────────────────────────────────────────
+// All unique riders per gender (omloop 1 only, no duplicates)
+const MEISJES = [
+  'Laura van der Heide','Alina Yachou','Aukje Anne Meeter',
+  'Maud van Lubek','Sara Bajema','Daphné Joffe',
+  'Joy Hoorn','Anneke Bouma','Isa Koopmans',
+  'Doutzen Ferbeek','Julia Kuipers','Senna Bergsma',
+  'Isa Buursen','Romee Hoorn','Ranomi Schaap',
+  'Luna Nettinga','Leanne Visser','Fayenna Schaap',
+];
+const JONGENS = [
+  'Finn Goosselink','Melle Pronk','Anay Das',
+  'Abel Duiven','Steijn Hendriksen','Robert Westerburger',
+  'Mees Hofstee','Jorrit Terpstra','Lars Eskens',
+  'Thijmen Smit','Tseard van der Zee','Krijn Horsten',
+  'Mats Meijer','Jurre Koopmans','Siem Bierma',
+  'Marijn Elling','Sylvan Radewalt','Stan Westra',
+];
+
+function openTijden() {
+  renderTijdenBody();
+  document.getElementById('tijdenOverlay').classList.add('open');
+}
+function closeTijden() {
+  document.getElementById('tijdenOverlay').classList.remove('open');
+  // Refresh right panel so omloop-2 references update
+  renderRight();
+}
+
+function renderTijdenBody() {
+  function groepHTML(namen, geslacht) {
+    const label = geslacht === 'f' ? '🩷 MEISJES' : '💙 JONGENS';
+    const rows = namen.map(naam => {
+      const key = tijdKey(1, naam); // always rit from SL omloop1 — use naam as key
+      const val = tijden[key] || '';
+      return `<div class="tijden-row">
+        <div class="tijden-naam">${naam}</div>
+        <input class="tijden-input${val?' filled':''}" type="text"
+          placeholder="0.00.00"
+          value="${val}"
+          oninput="updateTijd('${key}', this)"
+          onclick="this.select()"
+        />
+      </div>`;
+    }).join('');
+    return `<div class="tijden-groep">
+      <div class="tijden-groep-title ${geslacht}">${label}</div>
+      ${rows}
+    </div>`;
+  }
+  document.getElementById('tijdenBody').innerHTML =
+    groepHTML(MEISJES, 'f') + groepHTML(JONGENS, 'm');
+}
+
+function updateTijd(key, input) {
+  const val = input.value.trim();
+  tijden[key] = val;
+  input.classList.toggle('filled', val.length > 0);
+  saveTijden();
+}
+
+// Override tijdKey for the overlay: key by name only (omloop1 rit doesn't matter)
+// We need to match what riderColHTML uses: tijdKey(ritNr, naam)
+// So we store by naam directly — update tijdKey to be name-only
+// IMPORTANT: override the existing tijdKey to be name-based
+function tijdKey(ritNr, naam) { return 'tijd_' + naam; }
+
 // SCREEN ZOOM (affects entire page incl. left panel)
 let zoomLevel = parseInt(localStorage.getItem('zbZoom') || '100');
 const ZOOM_PRESETS = [
@@ -628,5 +763,17 @@ applyZoom();
 applyTileZoom();
 render();
 </script>
+
+<!-- TIJDEN OVERLAY -->
+<div class="tijden-overlay" id="tijdenOverlay">
+  <div class="tijden-modal">
+    <div class="tijden-modal-header">
+      <div class="tijden-modal-title">⏱ Tijden <span>Omloop 1</span></div>
+      <div class="tijden-modal-sub">Vul de tijden in — zichtbaar bij omloop 2</div>
+      <button class="tijden-close" onclick="closeTijden()">✕ SLUITEN</button>
+    </div>
+    <div class="tijden-modal-body" id="tijdenBody"></div>
+  </div>
+</div>
 </body>
 </html>
