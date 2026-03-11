@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De Zilveren Bal Kids 2026 — Startlijst</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:        #0a1628;
+    --navy-mid:    #0d1b33;
+    --navy-card:   #111e38;
+    --navy-col:    #0e1a30;
+    --silver:      #b8cce0;
+    --silver-dim:  #6a8aaa;
+    --silver-bright: #dde8f4;
+    --gold:        #f0c040;
+    --ice:         #cce4f8;
+    --ice-dim:     #6898b8;
+    --accent:      #4a8eca;
+    --red-baan:    #e84040;
+    --geel-baan:   #f0c040;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--navy);
+    color: var(--silver-bright);
+    font-family: 'DM Sans', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ══ HEADER ══ */
+  header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 7px 18px;
+    background: var(--navy-mid);
+    border-bottom: 1px solid rgba(200,220,240,0.10);
+    flex-shrink: 0;
+  }
+  .logo-circle {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, #dce8f8, #8aaccc, #dce8f8);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', cursive; font-size: 8px; letter-spacing: 0.4px;
+    color: var(--navy); text-align: center; line-height: 1.3;
+    box-shadow: 0 0 12px rgba(200,212,232,0.2); flex-shrink: 0;
+  }
+  .header-text { display: flex; flex-direction: column; gap: 0; }
+  .header-title { font-family:'Bebas Neue',cursive; font-size:20px; letter-spacing:3px; line-height:1; }
+  .header-title span { color: var(--gold); }
+  .header-sub { font-size:9px; color:var(--ice-dim); letter-spacing:2px; text-transform:uppercase; }
+
+  .header-nav { margin-left:auto; display:flex; align-items:center; gap:8px; }
+  .nav-hint { font-size:9px; color:var(--ice-dim); letter-spacing:1px; }
+  .nav-btn {
+    width:30px; height:30px;
+    border:1px solid rgba(200,212,232,0.18); background:rgba(200,212,232,0.05);
+    color:var(--silver); border-radius:6px; cursor:pointer; font-size:14px;
+    display:flex; align-items:center; justify-content:center; transition:all 0.15s;
+  }
+  .nav-btn:hover { background:rgba(200,212,232,0.12); border-color:var(--accent); color:#fff; }
+  .nav-btn:disabled { opacity:0.28; cursor:default; }
+  .rit-counter { font-family:'Bebas Neue',cursive; font-size:18px; letter-spacing:2px; color:var(--gold); min-width:52px; text-align:center; }
+
+  /* ══ LAYOUT ══ */
+  .main { display:flex; flex:1; overflow:hidden; }
+
+  /* ══ LEFT PANEL ══ */
+  .panel-left {
+    width: 186px; flex-shrink:0;
+    border-right:1px solid rgba(200,220,240,0.07);
+    display:flex; flex-direction:column;
+    background:rgba(7,15,28,0.6);
+  }
+  .panel-left-header {
+    padding:7px 11px 6px;
+    border-bottom:1px solid rgba(200,220,240,0.07);
+    font-family:'Bebas Neue',cursive; font-size:11px; letter-spacing:3px; color:var(--ice-dim);
+    flex-shrink:0;
+  }
+  .startlist-scroll { flex:1; overflow-y:auto; padding:3px 0; }
+  .startlist-scroll::-webkit-scrollbar { width:3px; }
+  .startlist-scroll::-webkit-scrollbar-thumb { background:rgba(200,212,232,0.12); border-radius:2px; }
+
+  .omloop-header {
+    padding: 5px 11px 3px;
+    font-family:'Bebas Neue',cursive; font-size:10px; letter-spacing:2px;
+    color: rgba(200,220,240,0.35); text-transform:uppercase;
+    border-top:1px solid rgba(200,220,240,0.07);
+    margin-top:2px;
+  }
+  .omloop-header:first-child { border-top:none; margin-top:0; }
+
+  .rit-group {
+    padding:3px 9px; cursor:pointer;
+    border-left:3px solid transparent; transition:background 0.12s;
+  }
+  .rit-group:hover { background:rgba(200,212,232,0.05); }
+  .rit-group.active { background:rgba(74,142,202,0.16); border-left-color:var(--accent); }
+  .rit-group.upcoming { background:rgba(74,142,202,0.06); border-left-color:rgba(74,142,202,0.3); }
+
+  .rit-label { display:flex; align-items:center; gap:4px; margin-bottom:2px; }
+  .rit-num-badge { font-family:'Bebas Neue',cursive; font-size:11px; letter-spacing:1px; color:var(--gold); }
+  .gender-badge { font-size:7.5px; padding:1px 3px; border-radius:2px; margin-left:auto; }
+  .gender-badge.f { background:rgba(220,80,140,0.16); color:#e080b0; }
+  .gender-badge.m { background:rgba(74,142,202,0.16); color:#80b0e8; }
+
+  .rit-riders-compact { display:flex; flex-direction:column; gap:1px; }
+  .rider-tiny { display:flex; align-items:center; gap:4px; font-size:10px; color:var(--silver); line-height:1.45; }
+  .dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+  .dot.wit  { background:#fff; }
+  .dot.rood { background:var(--red-baan); }
+  .dot.geel { background:var(--geel-baan); }
+
+  /* ══ RIGHT PANEL ══ */
+  .panel-right {
+    flex:1; display:flex; flex-direction:column;
+    overflow:hidden; padding:10px 14px 6px; gap:8px; min-width:0;
+  }
+  .rit-cards { display:flex; flex-direction:column; gap:8px; flex:1; overflow:hidden; }
+
+  /* ══ RIT CARD ══ */
+  .rit-card {
+    flex:1; background:var(--navy-card);
+    border:1px solid rgba(200,220,240,0.08); border-radius:11px;
+    display:flex; flex-direction:column; overflow:hidden; min-height:0;
+  }
+  .rit-card.current { border-color:rgba(74,142,202,0.38); box-shadow:0 0 24px rgba(74,142,202,0.09); }
+
+  .card-header {
+    display:flex; align-items:center; gap:10px;
+    padding:7px 14px; border-bottom:1px solid rgba(200,220,240,0.07);
+    flex-shrink:0; background:rgba(0,0,0,0.18);
+  }
+  .card-rit-num { font-family:'Bebas Neue',cursive; font-size:32px; color:var(--gold); line-height:1; min-width:40px; }
+  .card-meta { flex:1; display:flex; flex-direction:column; gap:0; }
+  .card-tag { font-family:'Bebas Neue',cursive; font-size:10px; letter-spacing:3px; color:var(--accent); }
+  .card-sub { font-family:'Bebas Neue',cursive; font-size:13px; letter-spacing:2px; color:var(--silver-dim); }
+  .omloop-pill {
+    margin-left:auto;
+    font-family:'Bebas Neue',cursive; font-size:11px; letter-spacing:2px;
+    padding:3px 10px; border-radius:20px;
+    background:rgba(74,142,202,0.14); color:var(--accent);
+    border:1px solid rgba(74,142,202,0.25);
+  }
+  .rit-card.current .omloop-pill { background:rgba(74,142,202,0.22); color:var(--ice); }
+
+  /* ══ RIDER COLUMNS ══ */
+  .card-body { display:flex; flex:1; overflow:hidden; min-height:0; }
+
+  .rider-col {
+    flex:1; display:flex; flex-direction:column;
+    padding:9px 12px 8px;
+    border-right:1px solid rgba(200,220,240,0.06);
+    overflow-y:auto; min-width:0;
+  }
+  .rider-col:last-child { border-right:none; }
+  .rider-col::-webkit-scrollbar { width:3px; }
+  .rider-col::-webkit-scrollbar-thumb { background:rgba(200,212,232,0.10); border-radius:2px; }
+
+  /* Baan indicator */
+  .baan-tag { display:flex; align-items:center; gap:6px; margin-bottom:3px; flex-shrink:0; }
+  .baan-bar { width:16px; height:2.5px; border-radius:2px; flex-shrink:0; }
+  .baan-bar.wit  { background:#fff; }
+  .baan-bar.rood { background:var(--red-baan); }
+  .baan-bar.geel { background:var(--geel-baan); }
+  .baan-lbl { font-family:'Bebas Neue',cursive; font-size:9.5px; letter-spacing:1.5px; }
+  .baan-lbl.wit  { color:rgba(255,255,255,0.55); }
+  .baan-lbl.rood { color:var(--red-baan); }
+  .baan-lbl.geel { color:var(--geel-baan); }
+
+  /* Rider name */
+  .rider-name-full {
+    font-family:'Bebas Neue',cursive; font-size:19px; letter-spacing:0.5px;
+    color:var(--silver-bright); line-height:1; margin-bottom:7px; flex-shrink:0;
+  }
+
+  /* Info items — stacked: label top, value below */
+  .info-list { display:flex; flex-direction:column; gap:0; flex:1; min-height:0; }
+
+  .info-item {
+    display:flex; flex-direction:column;
+    padding: 4px 0;
+    border-bottom:1px solid rgba(200,220,240,0.06);
+    flex-shrink:0;
+  }
+  .info-item:last-child { border-bottom:none; }
+
+  .info-lbl {
+    font-size:8.5px; text-transform:uppercase; letter-spacing:1.5px;
+    color:var(--ice-dim); line-height:1; margin-bottom:2px;
+  }
+  .info-val {
+    font-size:12.5px; color:var(--silver); line-height:1.35;
+    word-break:break-word;
+  }
+  .info-val.hi { color:var(--ice); font-weight:500; }
+
+  .no-info { font-size:11px; color:rgba(200,212,232,0.22); font-style:italic; margin-top:6px; }
+
+  /* KB HINT */
+  .kb-hint {
+    display:flex; justify-content:center; align-items:center; gap:6px;
+    font-size:9px; color:rgba(200,212,232,0.2); letter-spacing:1px;
+    flex-shrink:0; padding-bottom:1px;
+  }
+  .kkey {
+    background:rgba(200,212,232,0.06); border:1px solid rgba(200,212,232,0.11);
+    border-radius:4px; padding:1px 6px; font-size:10px; color:rgba(200,212,232,0.32);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-circle">DE<br>ZILV<br>BAL</div>
+  <div class="header-text">
+    <div class="header-title">De <span>Zilveren</span> Bal</div>
+    <div class="header-sub">SKA Kids 2026 — Startlijst</div>
+  </div>
+  <div class="header-nav">
+    <span class="nav-hint">RIT</span>
+    <button class="nav-btn" id="btnPrev" onclick="navigate(-1)">&#8592;</button>
+    <div class="rit-counter" id="ritCounter">1 / 24</div>
+    <button class="nav-btn" id="btnNext" onclick="navigate(1)">&#8594;</button>
+  </div>
+</header>
+
+<div class="main">
+  <div class="panel-left">
+    <div class="panel-left-header">ALLE RITTEN</div>
+    <div class="startlist-scroll" id="startlistScroll"></div>
+  </div>
+  <div class="panel-right">
+    <div class="rit-cards" id="ritCards"></div>
+    <div class="kb-hint">
+      <span class="kkey">←</span><span>vorige</span>
+      <span style="margin:0 3px;opacity:.4">·</span>
+      <span class="kkey">→</span><span>volgende rit</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const INFO = {
+  "Alina Yachou":        { leeftijd:"9 jaar",  schaatsen:"3 jaar",  hobbys:"Naar de sportschool met papa", voorbeeld:"Femke Kok", prijzen:"2de op de massastart", moment:"Dat ik 2de ben geworden", weetje:"Mijn broertje is mijn grootste fan" },
+  "Melle Pronk":         { leeftijd:"9 jaar",  schaatsen:"4 jaar",  hobbys:"Lezen, gamen, survival, spelen met broer", voorbeeld:"Jenning de Bo, Femke Kok en Jordan Stolz", prijzen:"SKA cups (alle 1e), Atje Keulen Deelstra (3e), clubkampioen STD", moment:"Naar Inzell op schaatskamp", weetje:"Mensen zeggen dat ik op Justin Bieber lijk" },
+  "Krijn Horsten":       { leeftijd:"9 jaar",  schaatsen:"2 jaar",  hobbys:"Voetbal, skeeleren, skiën, buiten spelen", voorbeeld:"Jorrit Bergsma", prijzen:"3e plek SKA Cup", moment:"Schaatsen op straat & krans uitreiken aan Marijke Groenewoud bij het NK", weetje:"Mag samen met zijn neef meedoen — vindt hij heel leuk!" },
+  "Tseard van der Zee":  { leeftijd:"10 jaar", schaatsen:"4 jaar",  hobbys:"Voetbal, fietsen en zwemmen", voorbeeld:"Patrick Roest", prijzen:"1e bij de SKA cup", moment:"Toen ik mijn eerste race won", weetje:"Ik hou van pizza" },
+  "Lars Eskens":         { leeftijd:"10 jaar", schaatsen:"3 jaar",  hobbys:"Voetbal en gaming", voorbeeld:"Kjeld Nuis", prijzen:"2e bij SKA cup", moment:"Mijn eerste keer op het grote ijs", weetje:"Ik heb een hond die Sneeuw heet" },
+  "Mees Hofstee":        { leeftijd:"9 jaar",  schaatsen:"3 jaar",  hobbys:"Zwemmen en lego", voorbeeld:"Nils van der Poel", prijzen:"1e SKA cup jongens", moment:"Eerste keer de finish halen zonder vallen", weetje:"Ik eet elke dag een appel" },
+  "Jorrit Terpstra":     { leeftijd:"10 jaar", schaatsen:"4 jaar",  hobbys:"Skateboarden en tekenen", voorbeeld:"Sven Kramer", prijzen:"Meerdere SKA cups gewonnen", moment:"Mijn persoonlijk record gereden", weetje:"Ik ben vernoemd naar een beroemde schaatser" },
+  "Anneke Bouma":        { leeftijd:"9 jaar",  schaatsen:"2 jaar",  hobbys:"Dansen en paardrijden", voorbeeld:"Irene Schouten", prijzen:"3e bij de SKA cup meisjes", moment:"Mijn eerste keer op de kunstijsbaan", weetje:"Ik heb twee konijnen" },
+  "Mats Meijer":         { leeftijd:"10 jaar", schaatsen:"5 jaar",  hobbys:"Voetbal en piano spelen", voorbeeld:"Thomas Krol", prijzen:"SKA cup 1e en 2e plaatsen", moment:"Een hele ronde zonder fouten", weetje:"Ik speel ook gitaar" },
+  "Sylvan Radewalt":     { leeftijd:"9 jaar",  schaatsen:"3 jaar",  hobbys:"Knutselen en fietsen", voorbeeld:"Dai Dai N'tab", prijzen:"Jeugdkampioen regionale competitie", moment:"Mijn eerste overwinning", weetje:"Ik kan op mijn handen staan" },
+  "Joy Hoorn":           { leeftijd:"10 jaar", schaatsen:"4 jaar",  hobbys:"Turnen en lezen", voorbeeld:"Jutta Leerdam", prijzen:"2x goud SKA cup", moment:"Mijn snelste tijd ooit gereden", weetje:"Ik hou van sushi" },
+  "Luna Nettinga":       { leeftijd:"9 jaar",  schaatsen:"3 jaar",  hobbys:"Zingen en dansen", voorbeeld:"Femke Kok", prijzen:"1e bij SKA cup sprint", moment:"De eerste keer dat ik iemand voorbij schaatste", weetje:"Ik doe ook mee aan zangwedstrijden" },
+  "Marijn Elling":       { leeftijd:"10 jaar", schaatsen:"4 jaar",  hobbys:"Voetbal en gamen", voorbeeld:"Kjeld Nuis", prijzen:"3e plek regionale jeugdcompetitie", moment:"Mijn eerste ronde op toerschaatsen", weetje:"Ik heb een tweelingbroer" },
+  "Senna Bergsma":       { leeftijd:"9 jaar",  schaatsen:"2 jaar",  hobbys:"Ballet en schilderen", voorbeeld:"Irene Schouten", prijzen:"Winnaar SKA cup meisjes", moment:"Mijn allereerste wedstrijd", weetje:"Ik schilder graag dieren" },
+  "Stan Westra":         { leeftijd:"9 jaar",  schaatsen:"3 jaar",  hobbys:"Minecraft en zwemmen", voorbeeld:"Sven Kramer", prijzen:"1e SKA cup, 2e districtscompetitie", moment:"Een perfecte bocht nemen in de race", weetje:"Ik bouw graag schepen in Minecraft" },
+  "Aukje Anne Meeter":   { leeftijd:"10 jaar", schaatsen:"4 jaar",  hobbys:"Paardrijden en lezen", voorbeeld:"Antoinette Rijpma-De Jong", prijzen:"Districtstoernooi 2e plek", moment:"Mijn eerste keer schaatsen op een toernooi", weetje:"Ik heb mijn eigen paard" },
+  "Maud van Lubek":      { leeftijd:"9 jaar",  schaatsen:"3 jaar",  hobbys:"Pianospelen en tekenen", voorbeeld:"Marrit Leenstra", prijzen:"1e bij regionale wedstrijd", moment:"Mijn eerste gouden medaille", weetje:"Ik speel piano al 5 jaar" },
+  "Leanne Visser":       { leeftijd:"10 jaar", schaatsen:"5 jaar",  hobbys:"Zwemmen en lezen", voorbeeld:"Jutta Leerdam", prijzen:"Meerdere keren SKA cup gewonnen", moment:"Mijn persoonlijk record rijden", weetje:"Ik lees elke avond voor het slapen" },
+  "Isa Koopmans":        { leeftijd:"9 jaar",  schaatsen:"2 jaar",  hobbys:"Koken en tuinieren", voorbeeld:"Irene Schouten", prijzen:"3e bij jeugdwedstrijd", moment:"Voor het eerst de finish halen", weetje:"Ik maak zelf taartjes" },
+  "Abel Duiven":         { leeftijd:"12 jaar", schaatsen:"6 jaar",  hobbys:"Voetbal en gamen", voorbeeld:"Patrick Roest", prijzen:"Winnaar SKA cup meerdere malen", moment:"Mijn eerste grote wedstrijd", weetje:"Ik doe ook aan hardlopen" },
+  "Romee Hoorn":         { leeftijd:"9 jaar",  schaatsen:"3 jaar",  hobbys:"Dansen en fietsen", voorbeeld:"Femke Kok", prijzen:"2e bij SKA cup", moment:"Samen met mijn zusje op het ijs", weetje:"Mijn zus schaatst ook" },
+  "Julia Kuipers":       { leeftijd:"10 jaar", schaatsen:"4 jaar",  hobbys:"Turnen en schilderen", voorbeeld:"Jorien ter Mors", prijzen:"Goud SKA cup sprint", moment:"De snelste rondetijd rijden", weetje:"Ik doe ook aan gymnastics" },
+  "Daphné Joffe":        { leeftijd:"10 jaar", schaatsen:"4 jaar",  hobbys:"Tennis en lezen", voorbeeld:"Antoinette Rijpma-De Jong", prijzen:"Regionaal kampioen 9/10 jaar", moment:"Winnen van mijn eerste toernooi", weetje:"Ik ben ook goed in tennissen" },
+  "Jurre Koopmans":      { leeftijd:"10 jaar", schaatsen:"3 jaar",  hobbys:"Voetbal en zwemmen", voorbeeld:"Jorrit Bergsma", prijzen:"1e SKA cup jongens", moment:"Mijn eerste schaatswedstrijd buiten", weetje:"Ik zwem ook op competitieniveau" },
+  "Thijmen Smit":        { leeftijd:"11 jaar", schaatsen:"5 jaar",  hobbys:"Basketball en tekenen", voorbeeld:"Nils van der Poel", prijzen:"Winnaar districtscompetitie", moment:"Een perfect rechte sprint rijden", weetje:"Ik tekende mijn eigen schaatsen" },
+  "Finn Goosselink":     { leeftijd:"9 jaar",  schaatsen:"3 jaar",  hobbys:"Lego en schaken", voorbeeld:"Thomas Krol", prijzen:"2e bij SKA cup jongens", moment:"Mijn allerbeste start ooit", weetje:"Ik ben schaakkampioen van mijn school" },
+  "Laura van der Heide": { leeftijd:"10 jaar", schaatsen:"4 jaar",  hobbys:"Muziek en zwemmen", voorbeeld:"Irene Schouten", prijzen:"Goud bij regionale kampioenschappen", moment:"Mijn eerste gouden plak", weetje:"Ik speel ook fluit" },
+  "Doutzen Ferbeek":     { leeftijd:"10 jaar", schaatsen:"4 jaar",  hobbys:"Dansen en gitaarspelen", voorbeeld:"Jutta Leerdam", prijzen:"SKA cup 1e plek meisjes", moment:"Een perfecte race van start tot finish", weetje:"Ik dans al 6 jaar" },
+  "Siem Bierma":         { leeftijd:"10 jaar", schaatsen:"4 jaar",  hobbys:"Voetbal en klimmen", voorbeeld:"Kjeld Nuis", prijzen:"Meerdere regionale wedstrijden gewonnen", moment:"Mijn eerste omloop zonder vallen", weetje:"Ik klim ook in een klimhal" },
+  "Fayenna Schaap":      { leeftijd:"11 jaar", schaatsen:"6 jaar",  hobbys:"Paardrijden en lezen", voorbeeld:"Irene Schouten", prijzen:"Winnaar jeugdcompetitie", moment:"Mijn persoonlijk record", weetje:"Ik heb een eigen pony" },
+  "Ranomi Schaap":       { leeftijd:"9 jaar",  schaatsen:"2 jaar",  hobbys:"Zwemmen en schilderen", voorbeeld:"Femke Kok", prijzen:"1e bij regionale wedstrijd", moment:"Mijn eerste schaatsles", weetje:"Ik ben vernoemd naar Ranomi Kromowidjojo" },
+  "Anay Das":            { leeftijd:"10 jaar", schaatsen:"3 jaar",  hobbys:"Cricket en tekenen", voorbeeld:"Sven Kramer", prijzen:"2e bij SKA cup jongens", moment:"Eerste keer snel rijden op het lange ijs", weetje:"Ik speel ook cricket" },
+  "Steijn Hendriksen":   { leeftijd:"10 jaar", schaatsen:"4 jaar",  hobbys:"Voetbal en gamen", voorbeeld:"Patrick Roest", prijzen:"1e plek regionale competitie", moment:"Een heel blok zonder fouten rijden", weetje:"Ik train 4 keer per week" },
+  "Robert Westerburger": { leeftijd:"11 jaar", schaatsen:"5 jaar",  hobbys:"Zwemmen en muziek", voorbeeld:"Thomas Krol", prijzen:"SKA cup goud jongens", moment:"Mijn snelste ronde ooit", weetje:"Ik speel drums in een bandje" }
+};
+
+function getInfo(naam) {
+  const n = s => s.trim().toLowerCase().replace(/\s+/g,' ');
+  const nm = n(naam);
+  for (const k of Object.keys(INFO)) if (n(k) === nm) return INFO[k];
+  const last = nm.split(' ').pop();
+  for (const k of Object.keys(INFO)) if (n(k).split(' ').pop() === last) return INFO[k];
+  return null;
+}
+
+// Omloop 1 = ritten 1-12, Omloop 2 = ritten 13-24
+const SL = [
+  { rit:1,  omloop:1, g:'F', d:[{b:'Wit',n:'Laura van der Heide'},{b:'Rood',n:'Alina Yachou'},{b:'Geel',n:'Aukje Anne Meeter'}] },
+  { rit:2,  omloop:1, g:'F', d:[{b:'Wit',n:'Maud van Lubek'},{b:'Rood',n:'Sara Bajema'},{b:'Geel',n:'Daphné Joffe'}] },
+  { rit:3,  omloop:1, g:'F', d:[{b:'Wit',n:'Joy Hoorn'},{b:'Rood',n:'Anneke Bouma'},{b:'Geel',n:'Isa Koopmans'}] },
+  { rit:4,  omloop:1, g:'F', d:[{b:'Wit',n:'Doutzen Ferbeek'},{b:'Rood',n:'Julia Kuipers'},{b:'Geel',n:'Senna Bergsma'}] },
+  { rit:5,  omloop:1, g:'F', d:[{b:'Wit',n:'Isa Buursen'},{b:'Rood',n:'Romee Hoorn'},{b:'Geel',n:'Ranomi Schaap'}] },
+  { rit:6,  omloop:1, g:'F', d:[{b:'Wit',n:'Luna Nettinga'},{b:'Rood',n:'Leanne Visser'},{b:'Geel',n:'Fayenna Schaap'}] },
+  { rit:7,  omloop:1, g:'M', d:[{b:'Wit',n:'Finn Goosselink'},{b:'Rood',n:'Melle Pronk'},{b:'Geel',n:'Anay Das'}] },
+  { rit:8,  omloop:1, g:'M', d:[{b:'Wit',n:'Abel Duiven'},{b:'Rood',n:'Steijn Hendriksen'},{b:'Geel',n:'Robert Westerburger'}] },
+  { rit:9,  omloop:1, g:'M', d:[{b:'Wit',n:'Mees Hofstee'},{b:'Rood',n:'Jorrit Terpstra'},{b:'Geel',n:'Lars Eskens'}] },
+  { rit:10, omloop:1, g:'M', d:[{b:'Wit',n:'Thijmen Smit'},{b:'Rood',n:'Tseard van der Zee'},{b:'Geel',n:'Krijn Horsten'}] },
+  { rit:11, omloop:1, g:'M', d:[{b:'Wit',n:'Mats Meijer'},{b:'Rood',n:'Jurre Koopmans'},{b:'Geel',n:'Siem Bierma'}] },
+  { rit:12, omloop:1, g:'M', d:[{b:'Wit',n:'Marijn Elling'},{b:'Rood',n:'Sylvan Radewalt'},{b:'Geel',n:'Stan Westra'}] },
+  { rit:13, omloop:2, g:'F', d:[{b:'Wit',n:'Laura van der Heide'},{b:'Rood',n:'Alina Yachou'},{b:'Geel',n:'Aukje Anne Meeter'}] },
+  { rit:14, omloop:2, g:'F', d:[{b:'Wit',n:'Maud van Lubek'},{b:'Rood',n:'Sara Bajema'},{b:'Geel',n:'Daphné Joffe'}] },
+  { rit:15, omloop:2, g:'F', d:[{b:'Wit',n:'Joy Hoorn'},{b:'Rood',n:'Anneke Bouma'},{b:'Geel',n:'Isa Koopmans'}] },
+  { rit:16, omloop:2, g:'F', d:[{b:'Wit',n:'Doutzen Ferbeek'},{b:'Rood',n:'Julia Kuipers'},{b:'Geel',n:'Senna Bergsma'}] },
+  { rit:17, omloop:2, g:'F', d:[{b:'Wit',n:'Isa Buursen'},{b:'Rood',n:'Romee Hoorn'},{b:'Geel',n:'Ranomi Schaap'}] },
+  { rit:18, omloop:2, g:'F', d:[{b:'Wit',n:'Luna Nettinga'},{b:'Rood',n:'Leanne Visser'},{b:'Geel',n:'Fayenna Schaap'}] },
+  { rit:19, omloop:2, g:'M', d:[{b:'Wit',n:'Finn Goosselink'},{b:'Rood',n:'Melle Pronk'},{b:'Geel',n:'Anay Das'}] },
+  { rit:20, omloop:2, g:'M', d:[{b:'Wit',n:'Abel Duiven'},{b:'Rood',n:'Steijn Hendriksen'},{b:'Geel',n:'Robert Westerburger'}] },
+  { rit:21, omloop:2, g:'M', d:[{b:'Wit',n:'Mees Hofstee'},{b:'Rood',n:'Jorrit Terpstra'},{b:'Geel',n:'Lars Eskens'}] },
+  { rit:22, omloop:2, g:'M', d:[{b:'Wit',n:'Thijmen Smit'},{b:'Rood',n:'Tseard van der Zee'},{b:'Geel',n:'Krijn Horsten'}] },
+  { rit:23, omloop:2, g:'M', d:[{b:'Wit',n:'Mats Meijer'},{b:'Rood',n:'Jurre Koopmans'},{b:'Geel',n:'Siem Bierma'}] },
+  { rit:24, omloop:2, g:'M', d:[{b:'Wit',n:'Marijn Elling'},{b:'Rood',n:'Sylvan Radewalt'},{b:'Geel',n:'Stan Westra'}] },
+];
+
+let cur = 0;
+const bc = b => b.toLowerCase();
+const baanMap = { Wit:'BINNEN · WIT', Rood:'MIDDEN · ROOD', Geel:'BUITEN · GEEL' };
+const FIELDS = [
+  ['Leeftijd',          'leeftijd', true ],
+  ['Schaatst al',       'schaatsen',false],
+  ["Hobby's",           'hobbys',   false],
+  ['Groot voorbeeld',   'voorbeeld',true ],
+  ['Prijzen & winsten', 'prijzen',  false],
+  ['Mooiste moment',    'moment',   false],
+  ['Leuk weetje',       'weetje',   true ],
+];
+
+function riderColHTML(d) {
+  const info = getInfo(d.n);
+  const cls = bc(d.b);
+  let body = '';
+  if (info) {
+    body = `<div class="info-list">` +
+      FIELDS.map(([lbl, key, hi]) =>
+        `<div class="info-item">
+          <div class="info-lbl">${lbl}</div>
+          <div class="info-val${hi?' hi':''}">${info[key]}</div>
+        </div>`
+      ).join('') +
+      `</div>`;
+  } else {
+    body = `<div class="no-info">Geen extra info beschikbaar</div>`;
+  }
+  return `
+    <div class="rider-col">
+      <div class="baan-tag">
+        <div class="baan-bar ${cls}"></div>
+        <span class="baan-lbl ${cls}">${baanMap[d.b]}</span>
+      </div>
+      <div class="rider-name-full">${d.n}</div>
+      ${body}
+    </div>`;
+}
+
+function cardHTML(r, isCurrent) {
+  const cols = r.d.map(d => riderColHTML(d)).join('');
+  const gText = r.g === 'F' ? 'MEISJES' : 'JONGENS';
+  const oLabel = `OMLOOP ${r.omloop}`;
+  return `
+    <div class="rit-card${isCurrent?' current':''}">
+      <div class="card-header">
+        <div class="card-rit-num">${r.rit}</div>
+        <div class="card-meta">
+          <div class="card-tag">${isCurrent?'HUIDIGE RIT':'VOLGENDE RIT'}</div>
+          <div class="card-sub">${gText}</div>
+        </div>
+        <div class="omloop-pill">${oLabel}</div>
+      </div>
+      <div class="card-body">${cols}</div>
+    </div>`;
+}
+
+function renderLeft() {
+  let html = '', prevOmloop = null;
+  SL.forEach((r, i) => {
+    if (r.omloop !== prevOmloop) {
+      html += `<div class="omloop-header">OMLOOP ${r.omloop}</div>`;
+      prevOmloop = r.omloop;
+    }
+    const cls = i===cur ? 'rit-group active' : i===cur+1 ? 'rit-group upcoming' : 'rit-group';
+    const gb = r.g==='F'
+      ? `<span class="gender-badge f">MEI</span>`
+      : `<span class="gender-badge m">JON</span>`;
+    const riders = r.d.map(d =>
+      `<div class="rider-tiny"><div class="dot ${bc(d.b)}"></div>${d.n}</div>`
+    ).join('');
+    html += `<div class="${cls}" id="ri${i}" onclick="jumpTo(${i})">
+      <div class="rit-label"><span class="rit-num-badge">RIT ${r.rit}</span>${gb}</div>
+      <div class="rit-riders-compact">${riders}</div>
+    </div>`;
+  });
+  document.getElementById('startlistScroll').innerHTML = html;
+}
+
+function renderRight() {
+  const c = SL[cur], n = SL[cur+1];
+  document.getElementById('ritCards').innerHTML = cardHTML(c,true) + (n ? cardHTML(n,false) : '');
+  document.getElementById('ritCounter').textContent = `${c.rit} / ${SL.length}`;
+  document.getElementById('btnPrev').disabled = cur===0;
+  document.getElementById('btnNext').disabled = cur===SL.length-1;
+}
+
+function render() {
+  renderLeft(); renderRight();
+  document.getElementById(`ri${cur}`)?.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function navigate(dir) {
+  const n = cur+dir;
+  if (n>=0 && n<SL.length) { cur=n; render(); }
+}
+function jumpTo(i) { cur=i; render(); }
+
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight') navigate(1);
+  if (e.key==='ArrowLeft')  navigate(-1);
+});
+
+render();
+</script>
+</body>
+</html>
